@@ -1,0 +1,6 @@
+Name,Birthdate,Score,Grade,Age,Weight,Graduated,Complex
+Alice,1/01/1990,90,A,30,15.5,True,37+2.2i
+Bob,2/02/1991,75,B,20,21.3,False,44.5+3i
+Charlie,3/03/1992,85,A,22,44.2,True,32
+David,4/04/1993,70,B,17,70.7,True,32+5i
+Eve,5/05/1994,Not Available,A,41,60.0,,
