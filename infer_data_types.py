@@ -15,7 +15,6 @@ def to_complex(l):
 
 
 def infer_and_convert_data_types(df):
-
     for col in df.columns:
         # int_count(df, col)
         if (
@@ -26,22 +25,23 @@ def infer_and_convert_data_types(df):
             df[col] = df[col].astype(bool)
             continue
 
-        try:
-            conv1 = df[col].astype(int)
-            conv2 = df[col].astype(float)
-            if (conv2 - conv1).sum() != 0:
-                df[col] = conv2
-            else:
-                df[col] = conv1
-            continue
-        except:
-            pass
-
         if df[col].apply(lambda x: "i" in str(x)).mean() >= 0.6:
             df_converted = to_complex(df[col])
             if not df_converted.isna().all():
                 df[col] = df_converted
                 continue
+
+        try:
+            conv1 = pd.to_numeric(df[col], errors="coerce").astype("Int64")
+            conv2 = pd.to_numeric(df[col], errors="coerce")
+            if not conv1.isna().all() and not conv2.isna().all():
+                if (conv2 - conv1).sum() != 0:
+                    df[col] = conv2
+                else:
+                    df[col] = conv1
+                continue
+        except:
+            pass
 
         # Attempt to convert to numeric first
         df_converted = pd.to_numeric(df[col], errors="coerce")
