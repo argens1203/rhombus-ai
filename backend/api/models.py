@@ -1,17 +1,43 @@
 from django.db import models
+import pandas as pd
 
-# Create your models here.
-class User(models.Model):
-    age = models.IntegerField()
-    name = models.CharField(max_length=100)
+def map_dtype_to_django_field(dtype):
+    if pd.api.types.is_integer_dtype(dtype):
+        return models.IntegerField
+    elif pd.api.types.is_float_dtype(dtype):
+        return models.FloatField
+    elif pd.api.types.is_bool_dtype(dtype):
+        return models.BooleanField
+    elif pd.api.types.is_datetime64_any_dtype(dtype):
+        return models.DateTimeField
+    else:
+        return models.CharField
 
-    # def __init__(self, name, age):
-    #     self.name = name
-    #     self.age = age
-
-    def __str__(self):
-        return self.name
-
+def df_to_fields(df):
+    """
+    Dynamically create a Django model class from a Pandas DataFrame.
+    
+    Args:
+    - df (pd.DataFrame): The DataFrame to base the model on.
+    - model_name (str): Name of the new model class.
+    - app_label (str): The app label to register the model under.
+    - module (str): The module where the model is defined.
+    
+    Returns:
+    - Django model class.
+    """
+    fields = {}
+    for column in df.columns:
+        # Map DataFrame column dtype to a Django field type
+        field_type = map_dtype_to_django_field(df[column].dtype)
+        
+        # Define the field with appropriate parameters
+        if field_type == models.CharField:
+            max_length = df[column].map(lambda x: len(str(x)) if pd.notna(x) else 0).max()
+            fields[column] = field_type(max_length=min(max_length, 255), blank=True, null=True)
+        else:
+            fields[column] = field_type(blank=True, null=True)
+    return fields
 
 def create_model(name, fields=None, app_label='', module='', options=None, admin_opts=None):
     """
@@ -49,3 +75,7 @@ def create_model(name, fields=None, app_label='', module='', options=None, admin
     #     admin.site.register(model, Admin)
 
     return model
+
+def df_to_model(df, name, app_label):
+    fields = df_to_fields(df)
+    return create_model(name, fields=fields, app_label=app_label)

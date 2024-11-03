@@ -3,6 +3,9 @@ from rest_framework import serializers
 class CSVSerializer(serializers.Serializer):
     file = serializers.FileField()
 
-class DTypeSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    object = serializers.CharField()
+def get_serializer(Model):
+    class UserSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Model
+            fields = "__all__"
+    return UserSerializer
