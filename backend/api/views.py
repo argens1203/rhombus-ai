@@ -1,9 +1,14 @@
+import pandas as pd
+import io
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
 from .models import User
-from .serializer import UserSerializer
+from .serializer import UserSerializer, CSVSerializer
+
+from .infer_data_types import infer_and_convert_data_types
 
 
 @api_view(["GET"])
@@ -42,3 +47,19 @@ def user_detail(request, pk):
     elif request.method == "DELETE":
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["POST"])
+def parse_csv(request):
+    serializer = CSVSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+    csv = serializer.validated_data["file"]
+    print("hello")
+    print(csv)
+    csv_data = pd.read_csv(io.StringIO(csv.read().decode("utf-8")))
+    print("goodbye")
+    print(csv_data)
+    infer_and_convert_data_types(csv_data)
+    return Response(status=status.HTTP_200_OK)

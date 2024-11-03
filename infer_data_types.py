@@ -65,15 +65,24 @@ def infer_and_convert_data_types(df):
     return df
 
 
-# Test the function with your DataFrame
-df = pd.read_csv("sample_data_2.csv")
-print("Data types before inference:")
-print(df.dtypes)
+import requests
 
-df = infer_and_convert_data_types(df)
+if __name__ == "__main__":
+    url = "http://localhost:8000/api/users/parse_csv"
+    with open("sample_data_2.csv", "rb") as f:
+        files = {"file": ("sample_data_2.csv", f, "text/csv")}
+        print(files)
+        response = requests.post(url, files=files)
 
-print("\nData types after inference:")
-print(df.dtypes)
-print(df)
+    # Test the function with your DataFrame
+    # df = pd.read_csv("sample_data_2.csv")
+    # print("Data types before inference:")
+    # print(df.dtypes)
 
-# %%
+    # df = infer_and_convert_data_types(df)
+
+    # print("\nData types after inference:")
+    # print(df.dtypes)
+    # print(df)
+
+    # %%
