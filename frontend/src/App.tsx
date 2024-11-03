@@ -3,10 +3,11 @@ import React, { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 
 import './App.css';
+import { DragNdrop } from './components/drag-drop';
 import logo from './logo.svg';
 
 function App() {
-    const [file, setFile] = useState<File | null>();
+    const [file, setFile] = useState<File | null>(null);
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         const files = e?.target?.files;
         if (!files) return;
@@ -33,8 +34,11 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <input type="file" onChange={onChange} />
+                {/* <img src={logo} className="App-logo" alt="logo" /> */}
+
+                {/* <input type="file" onChange={onChange} /> */}
+
+                <DragNdrop onFilesSelected={setFile} width={300} height={300} />
                 <button type="submit" onClick={onSubmit}>
                     Upload
                 </button>
