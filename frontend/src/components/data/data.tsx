@@ -58,8 +58,8 @@ export function Data() {
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.values(data).map((d) => (
-                            <tr>
+                        {Object.entries(data).map(([id, d]) => (
+                            <tr key={id}>
                                 {Object.entries(d).map(
                                     ([key, val]: [string, any]) => (
                                         <td key={key}>

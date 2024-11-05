@@ -7,15 +7,14 @@ import './App.css';
 import { Data } from './components/data';
 import { DragNdrop } from './components/drag-drop';
 import { useAppDispatch, putType, putStuff } from './redux';
+import { getDataApi } from './services/api';
 
 function App() {
     const [file, setFile] = useState<File | null>(null);
     const dispatch = useAppDispatch();
 
     const getData = async () => {
-        const url = 'http://localhost:8000/api/users';
-
-        axios.get(url).then((resp) => {
+        getDataApi().then((resp) => {
             console.log(resp.data);
             resp.data.forEach((item: { id: number } & Record<string, any>) => {
                 dispatch(putStuff({ id: item.id, item }));
