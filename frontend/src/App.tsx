@@ -2,36 +2,23 @@ import React, { ChangeEvent, useState } from 'react';
 
 import axios from 'axios';
 import { Container } from 'react-bootstrap';
+import { Rings } from 'react-loader-spinner';
 
 import './App.css';
-import { Data } from './components/data';
 import { DragNdrop } from './components/drag-drop';
-import { useAppDispatch, putType, putStuff } from './redux';
-import { getDataApi, parseCsvApi } from './services/api';
+import { parseCsv, ItemTable } from './modules/item';
+import { useIsLoading } from './modules/item/item.hook';
+import { useAppDispatch } from './redux';
 
 function App() {
     const [file, setFile] = useState<File | null>(null);
     const dispatch = useAppDispatch();
-
-    const getData = async () => {
-        getDataApi().then((resp) => {
-            console.log(resp.data);
-            resp.data.forEach((item: { id: number } & Record<string, any>) => {
-                dispatch(putStuff({ id: item.id, item }));
-            });
-        });
-    };
+    const isLoading = useIsLoading();
 
     const onSubmit = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         if (!file) return;
-
-        parseCsvApi(file)
-            .then((resp) => {
-                dispatch(putType(resp.data));
-            })
-            .then(getData)
-            .catch((err) => console.error(err));
+        dispatch(parseCsv(file));
     };
     return (
         <div className="App">
@@ -59,8 +46,19 @@ function App() {
                         Upload
                     </button>
                     <div style={{ flex: 1 }}>
-                        <Data />
+                        <ItemTable />
                     </div>
+                    {isLoading && (
+                        <Rings
+                            visible
+                            height="80"
+                            width="80"
+                            color="#4fa94d"
+                            ariaLabel="rings-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                        />
+                    )}
                 </Container>
             </header>
         </div>

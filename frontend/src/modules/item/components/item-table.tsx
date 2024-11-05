@@ -2,19 +2,16 @@ import React from 'react';
 
 import Table from 'react-bootstrap/Table';
 
-import { useAppSelector } from '../../redux';
-import { Item } from '../../redux/item.type';
+import { useAppSelector } from '../../../redux';
+import { Item } from '../item.type';
 
-import { Entry } from './data-cell';
+import { ItemCell } from './item-cell';
 
-export function Data() {
+export function ItemTable() {
     const type = useAppSelector((state) => state.item.types);
     const data = useAppSelector((state) => state.item.value);
-    console.log(data);
-    console.log(type);
 
     const names = Object.keys(type);
-    console.log('names', names);
 
     return (
         <div>
@@ -43,7 +40,7 @@ export function Data() {
                         {Object.values(data).map((datum: Item) => (
                             <tr key={datum.id}>
                                 {names.map((name: string) => (
-                                    <Entry
+                                    <ItemCell
                                         key={name}
                                         id={datum.id}
                                         attr={name}

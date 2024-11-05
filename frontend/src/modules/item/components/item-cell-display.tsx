@@ -1,14 +1,13 @@
 import React from 'react';
 
-import { useGetType, useGetValue } from './data-cell.hooks';
-import { parseValue } from './data-cell.util';
+import { useGetType, useGetValue } from '../item.hook';
 
 type Prop = {
     id: number;
     attr: string;
 };
 
-export function EntryDisplay({ id, attr }: Prop) {
+export function ItemCellDisplay({ id, attr }: Prop) {
     const type = useGetType(attr);
     const value = useGetValue(id, attr);
     if (type === 'Datetime') return value.toLocaleString();

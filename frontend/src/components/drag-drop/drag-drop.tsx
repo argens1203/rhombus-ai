@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-import { AiOutlineCheckCircle, AiOutlineCloudUpload } from 'react-icons/ai';
-import { MdClear } from 'react-icons/md';
+import { AiOutlineCloudUpload } from 'react-icons/ai';
 
 import './drag-drop.css';
 
@@ -19,8 +18,6 @@ export function DragNdrop({ onFilesSelected, width, height }: Props) {
         const selectedFiles = (event?.target?.files || []) as File[];
         if (selectedFiles && selectedFiles.length > 0) {
             setFiles(selectedFiles[0]);
-            // const newFiles = Array.from(selectedFiles);
-            // setFiles((prevFiles) => [...prevFiles, ...newFiles]);
         }
     };
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -28,15 +25,7 @@ export function DragNdrop({ onFilesSelected, width, height }: Props) {
         const droppedFiles = event.dataTransfer.files;
         if (droppedFiles.length > 0) {
             setFiles(droppedFiles[0]);
-            // const newFiles = Array.from(droppedFiles);
-            // setFiles((prevFiles) => [...prevFiles, ...newFiles]);
         }
-    };
-
-    const handleRemoveFile = (e: any) => {
-        e.stopPropagation();
-        setFiles(null);
-        // setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
 
     useEffect(() => {
@@ -61,10 +50,6 @@ export function DragNdrop({ onFilesSelected, width, height }: Props) {
                         <AiOutlineCloudUpload />
                         <div>
                             <p>Drag and drop your csv here</p>
-                            {/* <p>
-                            Limit 15MB per file. Supported files: .PDF, .DOCX,
-                            .PPTX, .TXT, .XLSX
-                        </p> */}
                         </div>
                     </div>
                 </div>
@@ -92,24 +77,10 @@ export function DragNdrop({ onFilesSelected, width, height }: Props) {
                             <div className="file-item" key={file.name}>
                                 <div className="file-info">
                                     <p>{file.name}</p>
-                                    {/* <p>{file.type}</p> */}
                                 </div>
-                                {/* <button
-                                    className="file-actions"
-                                    type="button"
-                                    onClick={handleRemoveFile}
-                                >
-                                    <MdClear />
-                                </button> */}
                             </div>
                         </div>
-                    </div>{' '}
-                    {/* <div className="success-file">
-                        <AiOutlineCheckCircle
-                            style={{ color: '#6DC24B', marginRight: 1 }}
-                        />
-                        <p>File selected</p>
-                    </div> */}
+                    </div>
                 </div>
             )}
         </section>

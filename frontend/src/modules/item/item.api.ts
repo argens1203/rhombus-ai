@@ -1,15 +1,20 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
-import { BASE_URL } from '../config';
+import { BASE_URL } from '../../config';
+
+import { Item } from './item.type';
 
 const path = '/users';
 const instance = axios.create({ baseURL: BASE_URL });
+instance.interceptors.response.use((resp: AxiosResponse) => resp.data);
 
-export const getDataApi = async () => {
+export const getAllItemsApi: () => Promise<Item[]> = async () => {
     return instance.get(path);
 };
 
-export const parseCsvApi = async (file: File) => {
+export const parseCsvApi: (
+    file: File
+) => Promise<Record<string, string>> = async (file: File) => {
     const url = `${path}/parse_csv`;
     const config = {
         headers: {
@@ -24,7 +29,7 @@ export const parseCsvApi = async (file: File) => {
     return instance.post(url, formData, config);
 };
 
-export const getItemApi = async (id: number) => {
+export const getItemApi: (id: number) => Promise<Item> = async (id: number) => {
     const url = `${path}/${id}`;
     return instance.get(url);
 };

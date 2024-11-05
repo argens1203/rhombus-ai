@@ -1,32 +1,27 @@
-import React, { useState, RefObject, useEffect, useRef } from 'react';
+import React from 'react';
 
 import Complex from 'complex.js';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
 
-import { useAppDispatch } from '../../redux';
-import { updateItem } from '../../redux/item.thunk';
-
-import { useGetType, useGetValue } from './data-cell.hooks';
-import { parseValue } from './data-cell.util';
+import { useAppDispatch } from '../../../redux';
+import { useGetType, useGetValue } from '../item.hook';
+import { updateItem } from '../redux/item.thunk';
 
 type Prop = {
     id: number;
     attr: string;
 };
 
-function DateEdit() {}
-
-export function EntryEdit({ id, attr }: Prop) {
+export function ItemCellEdit({ id, attr }: Prop) {
     const type = useGetType(attr);
     const value = useGetValue(id, attr);
     const dispatch = useAppDispatch();
-    console.log(value);
-    console.log(type);
+
     const update = (v: any) => {
-        console.log(`updating with: ${v}`);
         dispatch(updateItem(id, { [attr]: v }));
     };
+
     switch (type) {
         case 'Datetime':
             console.log(`${value.year}-${value.month}-${value.day}`);
@@ -97,7 +92,6 @@ export function EntryEdit({ id, attr }: Prop) {
                         console.log('is here?');
                         try {
                             const val = new Complex(text);
-                            console.log(text);
                             update(`(${val.re}+${val.im}j)`);
                         } catch (ex) {
                             console.error(ex);

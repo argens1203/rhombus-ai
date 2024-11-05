@@ -1,7 +1,7 @@
-import { configureStore, ThunkDispatch, AnyAction } from '@reduxjs/toolkit';
+import { configureStore, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-import { itemReducer } from './itemSlice';
+import { itemReducer } from '../modules/item';
 
 export const store = configureStore({
     reducer: {
@@ -18,5 +18,5 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export type AppThunkDispatch<E = unknown> = ThunkDispatch<
     RootState,
     E,
-    AnyAction
+    UnknownAction
 >;
