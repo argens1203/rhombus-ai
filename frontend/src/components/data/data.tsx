@@ -4,10 +4,7 @@ import Complex from 'complex.js';
 import { DateTime } from 'luxon';
 import Table from 'react-bootstrap/Table';
 
-type Props = {
-    data: any[];
-    type: Record<string, any>;
-};
+import { useAppSelector } from '../../redux';
 
 type Prop2 = {
     type: string;
@@ -42,12 +39,14 @@ function parseType(type: string) {
     return type;
 }
 
-export function Data({ data, type }: Props) {
+export function Data() {
+    const type = useAppSelector((state) => state.item.types);
+    const data = useAppSelector((state) => state.item.value);
     console.log(data);
     console.log(type);
     return (
         <div>
-            {data && data.length > 0 && type && (
+            {data && type && (
                 <Table
                     striped
                     bordered
@@ -65,14 +64,13 @@ export function Data({ data, type }: Props) {
                             )}
                         </tr>
                         <tr>
-                            <th>id</th>
                             {Object.keys(type).map((key: string) => (
                                 <th key={key}>{key}</th>
                             ))}
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((d) => (
+                        {Object.values(data).map((d) => (
                             <tr>
                                 {Object.entries(d).map(
                                     ([key, val]: [string, any]) => (
