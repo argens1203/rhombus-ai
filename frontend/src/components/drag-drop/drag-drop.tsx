@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { AiOutlineCheckCircle, AiOutlineCloudUpload } from 'react-icons/ai';
 import { MdClear } from 'react-icons/md';
@@ -13,6 +13,7 @@ type Props = {
 
 export function DragNdrop({ onFilesSelected, width, height }: Props) {
     const [file, setFiles] = useState<File | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = (event?.target?.files || []) as File[];
@@ -32,7 +33,8 @@ export function DragNdrop({ onFilesSelected, width, height }: Props) {
         }
     };
 
-    const handleRemoveFile = () => {
+    const handleRemoveFile = (e: any) => {
+        e.stopPropagation();
         setFiles(null);
         // setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
@@ -41,38 +43,50 @@ export function DragNdrop({ onFilesSelected, width, height }: Props) {
         onFilesSelected(file);
     }, [file, onFilesSelected]);
 
+    const onClick = () => {
+        inputRef.current?.click();
+    };
+
     return (
         <section className="drag-drop" style={{ width, height }}>
-            <div
-                className={`document-uploader ${
-                    file ? 'upload-box active' : 'upload-box'
-                }`}
-                onDrop={handleDrop}
-                onDragOver={(event) => event.preventDefault()}
-            >
-                <div className="upload-info">
-                    <AiOutlineCloudUpload />
-                    <div>
-                        <p>Drag and drop your files here</p>
-                        <p>
+            <button className="drag-drop-btn" type="button" onClick={onClick}>
+                <div
+                    className={`document-uploader ${
+                        file ? 'upload-box active' : 'upload-box'
+                    }`}
+                    onDrop={handleDrop}
+                    onDragOver={(event) => event.preventDefault()}
+                >
+                    <div className="upload-info">
+                        <AiOutlineCloudUpload />
+                        <div>
+                            <p>Drag and drop your csv here</p>
+                            {/* <p>
                             Limit 15MB per file. Supported files: .PDF, .DOCX,
                             .PPTX, .TXT, .XLSX
-                        </p>
+                        </p> */}
+                        </div>
                     </div>
                 </div>
-                <label htmlFor="browse" className="browse-btn">
-                    Browse files
-                    <input
-                        type="file"
-                        hidden
-                        id="browse"
-                        onChange={handleFileChange}
-                        accept=".pdf,.docx,.pptx,.txt,.xlsx"
-                        multiple
-                    />
-                </label>
+            </button>
+            <label htmlFor="browse">
+                {/* Browse files */}
+                <input
+                    ref={inputRef}
+                    type="file"
+                    hidden
+                    id="browse"
+                    onChange={handleFileChange}
+                    accept=".pdf,.docx,.pptx,.txt,.xlsx"
+                    multiple
+                />
+            </label>
 
-                {file && (
+            {file && (
+                // eslint-disable-next-line
+                        <div
+                    className="no-click"
+                >
                     <div className="file-list">
                         <div className="file-list__container">
                             <div className="file-item" key={file.name}>
@@ -80,25 +94,24 @@ export function DragNdrop({ onFilesSelected, width, height }: Props) {
                                     <p>{file.name}</p>
                                     {/* <p>{file.type}</p> */}
                                 </div>
-                                <div className="file-actions">
-                                    <MdClear
-                                        onClick={() => handleRemoveFile()}
-                                    />
-                                </div>
+                                <button
+                                    className="file-actions"
+                                    type="button"
+                                    onClick={handleRemoveFile}
+                                >
+                                    <MdClear />
+                                </button>
                             </div>
                         </div>
-                    </div>
-                )}
-
-                {file && (
+                    </div>{' '}
                     <div className="success-file">
                         <AiOutlineCheckCircle
                             style={{ color: '#6DC24B', marginRight: 1 }}
                         />
                         <p>File selected</p>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </section>
     );
 }
