@@ -8,5 +8,24 @@ type Props = {
 export function Data({ data, type }: Props) {
     console.log(data);
     console.log(type);
-    return <div />;
+    return (
+        data &&
+        type && (
+            <table>
+                <thead>
+                    {Object.keys(type).map((key: string) => (
+                        <th>{key}</th>
+                    ))}
+                </thead>
+                {data.map((d) => (
+                    <tr>
+                        {Object.values(d).map((val: any) => (
+                            <td>{val}</td>
+                        ))}
+                    </tr>
+                ))}
+                <tbody />
+            </table>
+        )
+    );
 }
