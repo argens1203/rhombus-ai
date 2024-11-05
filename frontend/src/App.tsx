@@ -7,7 +7,7 @@ import './App.css';
 import { Data } from './components/data';
 import { DragNdrop } from './components/drag-drop';
 import { useAppDispatch, putType, putStuff } from './redux';
-import { getDataApi } from './services/api';
+import { getDataApi, parseCsvApi } from './services/api';
 
 function App() {
     const [file, setFile] = useState<File | null>(null);
@@ -26,17 +26,7 @@ function App() {
         e.preventDefault();
         if (!file) return;
 
-        const url = 'http://localhost:8000/api/users/parse_csv';
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('fileName', file.name);
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data',
-            },
-        };
-        axios
-            .post(url, formData, config)
+        parseCsvApi(file)
             .then((resp) => {
                 dispatch(putType(resp.data));
             })

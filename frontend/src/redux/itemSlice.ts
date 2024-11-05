@@ -1,20 +1,31 @@
 import { CaseReducer, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { parseValue } from '../components/data/data-cell.util';
+
+import { Item } from './item.type';
+
 type CounterState = {
-    value: Record<number, Record<string, any>>;
+    value: Record<number, Item>;
     types: Record<string, any>;
+    loading: boolean;
 };
 
 const initialState: CounterState = {
     value: {},
     types: {},
+    loading: false,
 };
 
 const putStuffAction: CaseReducer<
     CounterState,
-    PayloadAction<{ id: number; item: Record<string, any> }>
+    PayloadAction<{ id: number; item: Item }>
 > = (state, action) => {
     const { id, item } = action.payload;
+    // const parsedItem: Item = { id };
+    // Object.entries(item).forEach(([attr, value]) => {
+    //     const parsed = parseValue(state.types[attr], value);
+    //     parsedItem[attr] = parsed;
+    // });
     state.value[id] = item;
 };
 
@@ -49,6 +60,9 @@ export const itemSlice = createSlice({
     reducers: {
         putStuff: putStuffAction,
         putType: putTypeAction,
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
         // increment: (state) => {
         //     state.value += 1;
         // },
@@ -62,6 +76,6 @@ export const itemSlice = createSlice({
     },
 });
 
-export const { putStuff, putType } = itemSlice.actions;
+export const { putStuff, putType, setLoading } = itemSlice.actions;
 
 export const itemReducer = itemSlice.reducer;
