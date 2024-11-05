@@ -14,7 +14,6 @@ export function ItemCell({ id, attr }: Prop) {
     const [clicked, setClicked] = useState<boolean>(false);
     const ref = useRef<HTMLTableCellElement>(null);
     const onClickOutside = () => {
-        console.log('outside');
         setClicked(false);
     };
     useClickOutside(ref, onClickOutside);

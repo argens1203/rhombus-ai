@@ -4,7 +4,8 @@ import { DateTime } from 'luxon';
 export function parseValue(type: string, value: any) {
     switch (type) {
         case 'Datetime':
-            return DateTime.fromISO(value);
+            const dt = DateTime.fromISO(value);
+            return dt.isValid ? dt : null;
         case 'Str':
             return value;
         case 'Complex':

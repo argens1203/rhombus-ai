@@ -41,3 +41,8 @@ export const updateItemApi = async (
     const url = `${path}/${id}`;
     return instance.put(url, partial);
 };
+
+export const createItemApi: () => Promise<Item> = async () => {
+    const url = `${path}/create`;
+    return instance.post(url);
+};

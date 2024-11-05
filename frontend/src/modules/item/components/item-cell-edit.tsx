@@ -24,7 +24,6 @@ export function ItemCellEdit({ id, attr }: Prop) {
 
     switch (type) {
         case 'Datetime':
-            console.log(`${value.year}-${value.month}-${value.day}`);
             return (
                 <Form.Control
                     type="date"

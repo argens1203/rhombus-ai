@@ -4,6 +4,7 @@ import {
     updateItemApi,
     parseCsvApi,
     getAllItemsApi,
+    createItemApi,
 } from '../item.api';
 import { Item } from '../item.type';
 
@@ -34,11 +35,11 @@ export function parseCsv(file: File) {
             .catch((err) => console.error(err))
             .finally(() => dispatch(setLoading(false)));
 
-        dispatch(getData());
+        dispatch(getAllItems());
     };
 }
 
-export function getData() {
+export function getAllItems() {
     return async function (dispatch: AppThunkDispatch) {
         dispatch(setLoading(true));
         getAllItemsApi()
@@ -48,6 +49,18 @@ export function getData() {
                 });
             })
             .catch((err) => console.error(err))
-            .finally(() => setLoading(false));
+            .finally(() => dispatch(setLoading(false)));
+    };
+}
+
+export function createItem() {
+    return async function (dispatch: AppThunkDispatch) {
+        dispatch(setLoading(true));
+        createItemApi()
+            .then((item) => {
+                dispatch(putStuff({ id: item.id, item }));
+            })
+            .catch((err) => console.error(err))
+            .finally(() => dispatch(setLoading(false)));
     };
 }
