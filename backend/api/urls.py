@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import get_users, create_user, user_detail, parse_csv
+from .views import get_items, create_item, item_handle, parse_csv
 
 urlpatterns = [
-    path("users/", get_users, name="get_users"),
-    path("users/create/", create_user, name="create_user"),
-    path("users/<int:pk>", user_detail, name="user_detail"),
-    path("users/parse_csv", parse_csv, name="parse_csv"),
+    path("items/", get_items, name="get_items"),
+    path("items/create", create_item, name="create_item"),
+    path("items/<int:pk>", item_handle, name="item_handle"),
+    path("items/parse_csv", parse_csv, name="parse_csv"),
 ]

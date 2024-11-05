@@ -66,14 +66,6 @@ def create_model(name, fields=None, app_label='', module='', options=None, admin
     # Create the class, which automatically triggers ModelBase processing
     model = type(name, (models.Model,), attrs)
 
-    # Create an Admin class if admin options were provided
-    # if admin_opts is not None:
-    #     class Admin(admin.ModelAdmin):
-    #         pass
-    #     for key, value in admin_opts:
-    #         setattr(Admin, key, value)
-    #     admin.site.register(model, Admin)
-
     return model
 
 def df_to_model(df, name, app_label):

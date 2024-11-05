@@ -4,7 +4,7 @@ import { BASE_URL } from '../../config';
 
 import { Item } from './item.type';
 
-const path = '/users';
+const path = '/items';
 const instance = axios.create({ baseURL: BASE_URL });
 instance.interceptors.response.use((resp: AxiosResponse) => resp.data);
 

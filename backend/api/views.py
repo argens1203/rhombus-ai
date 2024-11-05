@@ -6,13 +6,13 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import  df_to_model
-from .serializer import  CSVSerializer, get_serializer
+from .serializer import  CSVSerializer, get_serializer, serialize_dtype
 from .infer_data_types import infer_and_convert_data_types
 
 DynamicModel = None
 
 @api_view(["GET"])
-def get_users(request):
+def get_items(request):
     users = DynamicModel.objects.all()
     print(users)
 
@@ -21,7 +21,7 @@ def get_users(request):
 
 
 @api_view(["POST"])
-def create_user(request):
+def create_item(request):
 
     serializer = get_serializer(DynamicModel)(data=request.data)
     if serializer.is_valid():
@@ -31,7 +31,7 @@ def create_user(request):
 
 
 @api_view(["GET", "PUT", "DELETE"])
-def user_detail(request, pk):
+def item_handle(request, pk):
     try:
         user = DynamicModel.objects.get(pk=pk)
     except DynamicModel.DoesNotExist:
@@ -49,22 +49,6 @@ def user_detail(request, pk):
     elif request.method == "DELETE":
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-from pandas.api.types import is_complex_dtype, is_bool_dtype, is_integer_dtype, is_float_dtype, is_datetime64_any_dtype
-def serialize_dtype(dtype):
-    if is_complex_dtype(dtype):
-        return 'Complex'
-    if isinstance(dtype, pd.CategoricalDtype):
-        return str(dtype.categories._data)
-    if is_bool_dtype(dtype):
-        return 'Bool'
-    if is_integer_dtype(dtype):
-        return 'Int'
-    if is_float_dtype(dtype):
-        return 'Float'
-    if is_datetime64_any_dtype(dtype):
-        return 'Datetime'
-    return 'Str'
 
 from pandas.api.types import is_complex_dtype
 
@@ -88,7 +72,6 @@ def parse_csv(request):
 
     dtype_dict = df.dtypes.to_dict()
     for record in df.to_dict(orient='records'):
-        print(record)
         for key in record:
             if is_complex_dtype(dtype_dict[key]):
                 record[key]=str(record[key])
@@ -97,23 +80,6 @@ def parse_csv(request):
             serializer.save()
         else:
             print(serializer.errors)
-
-
-    # dictt = df.to_dict(orient='split')
-    # columns, data = dictt['columns'], dictt['data']
-
-    # print(dictt)
-    # types = df.dtypes.tolist()
-    # print(types)
-    # for idx, entry in df.iterrows():
-    #     print(idx)
-    #     print('---- ---- --- ---- ')
-    #     print(entry.to_dict())
-    #     serializer = get_serializer(DynamicModel)(data=entry.to_dict())
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #     else:
-    #         print(serializer.errors)
 
     serialized = {key: serialize_dtype(value) for key, value in dtype_dict.items()}
     return Response(serialized, status=status.HTTP_200_OK)
