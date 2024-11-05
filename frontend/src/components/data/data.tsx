@@ -27,18 +27,6 @@ function Entry({ type, value }: Prop2) {
     }
 }
 
-function parseType(type: string) {
-    if (type.includes('[') && type.includes(']')) {
-        return type
-            .replace('[', '')
-            .replace(']', '')
-            .replace(/'/gi, '')
-            .split(' ')
-            .join('/');
-    }
-    return type;
-}
-
 export function Data() {
     const type = useAppSelector((state) => state.item.types);
     const data = useAppSelector((state) => state.item.value);
@@ -59,7 +47,7 @@ export function Data() {
                             {Object.values(type).map(
                                 (t: string, idx: number) => (
                                     // eslint-disable-next-line
-                                    <th key={idx}>{parseType(t)}</th>
+                                    <th key={idx}>{t}</th>
                                 )
                             )}
                         </tr>

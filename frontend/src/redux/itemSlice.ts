@@ -18,12 +18,28 @@ const putStuffAction: CaseReducer<
     state.value[id] = item;
 };
 
+function parseType(type: string) {
+    if (type.includes('[') && type.includes(']')) {
+        return type
+            .replace('[', '')
+            .replace(']', '')
+            .replace(/'/gi, '')
+            .split(' ')
+            .join('/');
+    }
+    return type;
+}
+
 const putTypeAction: CaseReducer<
     CounterState,
-    PayloadAction<Record<string, any>>
+    PayloadAction<Record<string, string>>
 > = (state, action) => {
+    state.types = { id: 'Int' };
+
     const types = action.payload;
-    state.types = { id: 'Int', ...types };
+    Object.entries(types).forEach(([k, v]) => {
+        state.types[k] = parseType(v);
+    });
 };
 
 export const itemSlice = createSlice({

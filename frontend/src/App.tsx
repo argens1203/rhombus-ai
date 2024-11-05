@@ -6,18 +6,12 @@ import { Container } from 'react-bootstrap';
 import './App.css';
 import { Data } from './components/data';
 import { DragNdrop } from './components/drag-drop';
-import logo from './logo.svg';
 import { useAppDispatch, putType, putStuff } from './redux';
 
 function App() {
     const [file, setFile] = useState<File | null>(null);
-    const [data, setData] = useState<any>([]);
     const dispatch = useAppDispatch();
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const files = e?.target?.files;
-        if (!files) return;
-        setFile(files[0]);
-    };
+
     const getData = async () => {
         const url = 'http://localhost:8000/api/users';
 
@@ -26,7 +20,6 @@ function App() {
             resp.data.forEach((item: { id: number } & Record<string, any>) => {
                 dispatch(putStuff({ id: item.id, item }));
             });
-            // setData(resp.data);
         });
     };
 
@@ -77,11 +70,8 @@ function App() {
                         Upload
                     </button>
                     <div style={{ flex: 1 }}>
-                        <Data data={data} />
+                        <Data />
                     </div>
-                    {/* <img src={logo} className="App-logo" alt="logo" /> */}
-
-                    {/* <input type="file" onChange={onChange} /> */}
                 </Container>
             </header>
         </div>
