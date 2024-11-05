@@ -9,3 +9,4 @@ def get_serializer(Model):
             model = Model
             fields = "__all__"
     return UserSerializer
+

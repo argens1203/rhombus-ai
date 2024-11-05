@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 
 import axios from 'axios';
+import { Container } from 'react-bootstrap';
 
 import './App.css';
 import { Data } from './components/data';
@@ -46,20 +47,35 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <Data data={data} type={type} />
-                {/* <img src={logo} className="App-logo" alt="logo" /> */}
-
-                {/* <input type="file" onChange={onChange} /> */}
-
-                <DragNdrop onFilesSelected={setFile} width={300} height={300} />
-                <button
-                    className="btn-upload"
-                    type="submit"
-                    onClick={onSubmit}
-                    disabled={!file}
+                <Container
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        minHeight: '100vh',
+                        padding: 15,
+                    }}
                 >
-                    Upload
-                </button>
+                    <DragNdrop
+                        onFilesSelected={setFile}
+                        width={300}
+                        height={300}
+                    />
+                    <button
+                        className="btn-upload"
+                        type="submit"
+                        onClick={onSubmit}
+                        disabled={!file}
+                    >
+                        Upload
+                    </button>
+                    <div style={{ flex: 1 }}>
+                        <Data data={data} type={type} />
+                    </div>
+                    {/* <img src={logo} className="App-logo" alt="logo" /> */}
+
+                    {/* <input type="file" onChange={onChange} /> */}
+                </Container>
             </header>
         </div>
     );
