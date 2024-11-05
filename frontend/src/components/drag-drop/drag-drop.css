@@ -57,7 +57,6 @@
   cursor: default;
   display: flex;
   flex-direction: column;
-  flex: 1;
   align-self: stretch;
 }
 
@@ -65,7 +64,6 @@
   display: flex;
   flex-direction: column;
   align-self: stretch;
-  flex: 1;
   gap: 0.5rem;
   width: 100%;
   &__container {

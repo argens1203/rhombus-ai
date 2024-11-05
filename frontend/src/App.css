@@ -38,6 +38,11 @@
 }
 
 button.btn-upload {
+  &[disabled]{
+    cursor:not-allowed;
+    background-color: grey;
+    color: black;
+  }
   cursor: pointer;
   margin: 25px;
   width: 30%;
@@ -55,7 +60,7 @@ button.btn-upload {
   color: #0d6efd;
   background-color: white;
   border-color: white;
-  &:hover {
+  &:hover:enabled {
     color: white;
     border-color: white;
     background-color: #033580;

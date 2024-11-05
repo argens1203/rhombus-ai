@@ -94,22 +94,22 @@ export function DragNdrop({ onFilesSelected, width, height }: Props) {
                                     <p>{file.name}</p>
                                     {/* <p>{file.type}</p> */}
                                 </div>
-                                <button
+                                {/* <button
                                     className="file-actions"
                                     type="button"
                                     onClick={handleRemoveFile}
                                 >
                                     <MdClear />
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>{' '}
-                    <div className="success-file">
+                    {/* <div className="success-file">
                         <AiOutlineCheckCircle
                             style={{ color: '#6DC24B', marginRight: 1 }}
                         />
                         <p>File selected</p>
-                    </div>
+                    </div> */}
                 </div>
             )}
         </section>
