@@ -50,6 +50,24 @@ def user_detail(request, pk):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+from pandas.api.types import is_complex_dtype, is_bool_dtype, is_integer_dtype, is_float_dtype, is_datetime64_any_dtype
+def serialize_dtype(dtype):
+    if is_complex_dtype(dtype):
+        return 'Complex'
+    if isinstance(dtype, pd.CategoricalDtype):
+        return str(dtype.categories._data)
+    if is_bool_dtype(dtype):
+        return 'Bool'
+    if is_integer_dtype(dtype):
+        return 'Int'
+    if is_float_dtype(dtype):
+        return 'Float'
+    if is_datetime64_any_dtype(dtype):
+        return 'Datetime'
+    return 'Str'
+
+from pandas.api.types import is_complex_dtype
+
 @api_view(["POST"])
 def parse_csv(request):
     global DynamicModel
@@ -68,4 +86,34 @@ def parse_csv(request):
         schema_editor.delete_model(DynamicModel)
         schema_editor.create_model(DynamicModel)
 
-    return Response("Schema Created", status=status.HTTP_200_OK)
+    dtype_dict = df.dtypes.to_dict()
+    for record in df.to_dict(orient='records'):
+        print(record)
+        for key in record:
+            if is_complex_dtype(dtype_dict[key]):
+                record[key]=str(record[key])
+        serializer = get_serializer(DynamicModel)(data=record)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            print(serializer.errors)
+
+
+    # dictt = df.to_dict(orient='split')
+    # columns, data = dictt['columns'], dictt['data']
+
+    # print(dictt)
+    # types = df.dtypes.tolist()
+    # print(types)
+    # for idx, entry in df.iterrows():
+    #     print(idx)
+    #     print('---- ---- --- ---- ')
+    #     print(entry.to_dict())
+    #     serializer = get_serializer(DynamicModel)(data=entry.to_dict())
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #     else:
+    #         print(serializer.errors)
+
+    serialized = {key: serialize_dtype(value) for key, value in dtype_dict.items()}
+    return Response(serialized, status=status.HTTP_200_OK)
