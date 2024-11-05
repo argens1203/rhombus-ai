@@ -39,7 +39,7 @@ function App() {
                 {/* <input type="file" onChange={onChange} /> */}
 
                 <DragNdrop onFilesSelected={setFile} width={300} height={300} />
-                <button type="submit" onClick={onSubmit}>
+                <button className="btn-upload" type="submit" onClick={onSubmit}>
                     Upload
                 </button>
             </header>
