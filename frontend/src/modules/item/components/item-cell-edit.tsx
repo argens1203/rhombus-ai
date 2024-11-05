@@ -84,11 +84,10 @@ export function ItemCellEdit({ id, attr }: Prop) {
             return (
                 <Form.Control
                     type="text"
-                    defaultValue={!!value && value.toString()}
+                    defaultValue={value?.toString() || ''}
                     onBlur={(e) => {
                         const text = e.target.value;
                         if (!text) update(null);
-                        console.log('is here?');
                         try {
                             const val = new Complex(text);
                             update(`(${val.re}+${val.im}j)`);
@@ -134,17 +133,3 @@ export function ItemCellEdit({ id, attr }: Prop) {
             );
     }
 }
-
-// if is_complex_dtype(dtype):
-// return 'Complex'
-// if isinstance(dtype, pd.CategoricalDtype):
-// return str(dtype.categories._data)
-// if is_bool_dtype(dtype):
-// return 'Bool'
-// if is_integer_dtype(dtype):
-// return 'Int'
-// if is_float_dtype(dtype):
-// return 'Float'
-// if is_datetime64_any_dtype(dtype):
-// return 'Datetime'
-// return 'Str'

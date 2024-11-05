@@ -9,6 +9,7 @@
 .drag-drop-btn {
   display: flex;
   flex: 1;
+  align-items: stretch;
 }
 
 .document-uploader {

@@ -62,7 +62,7 @@ export function DragNdrop({ onFilesSelected, width, height }: Props) {
                     hidden
                     id="browse"
                     onChange={handleFileChange}
-                    accept=".pdf,.docx,.pptx,.txt,.xlsx"
+                    accept=".csv"
                     multiple
                 />
             </label>

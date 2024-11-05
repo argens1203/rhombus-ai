@@ -55,9 +55,13 @@ export const itemSlice = createSlice({
         setLoading: (state, action) => {
             state.loading = action.payload;
         },
+        clearItems: (state) => {
+            state.value = {};
+            state.types = {};
+        },
     },
 });
 
-export const { putStuff, putType, setLoading } = itemSlice.actions;
+export const { putStuff, putType, setLoading, clearItems } = itemSlice.actions;
 
 export const itemReducer = itemSlice.reducer;

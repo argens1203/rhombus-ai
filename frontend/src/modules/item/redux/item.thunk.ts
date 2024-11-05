@@ -8,7 +8,7 @@ import {
 } from '../item.api';
 import { Item } from '../item.type';
 
-import { putStuff, setLoading, putType } from './item.slice';
+import { putStuff, setLoading, putType, clearItems } from './item.slice';
 
 export function updateItem(id: number, partial: Partial<Item>) {
     return async function (dispatch: AppThunkDispatch) {
@@ -28,6 +28,7 @@ export function updateItem(id: number, partial: Partial<Item>) {
 export function parseCsv(file: File) {
     return async function (dispatch: AppThunkDispatch) {
         dispatch(setLoading(true));
+        dispatch(clearItems());
         parseCsvApi(file)
             .then((data) => {
                 dispatch(putType(data));
